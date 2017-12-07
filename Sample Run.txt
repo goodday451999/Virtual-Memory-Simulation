@@ -1,0 +1,93 @@
+Sample Run
+
+Here's a sample run. I have spaced things out so you can see the sequence of events in time.
+> OS 5 2                             
+The shared memory key (PID) is 78801
+Initialized page table
+                                        > MMU 5 W2 R3 W3 R4 78801
+                                        Initialized page table:
+                                         0: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         1: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         2: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         3: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         4: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         
+                                        Request for page 2 in W mode
+                                        It's not in RAM - page fault
+Process 78803 has requested page 2
+Put it in free frame 0
+Unblock MMU
+                                        Set the dirty bit for page 2
+                                         0: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         1: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         2: Valid=1 Frame= 0 Dirty=1 Requested=0
+                                         3: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         4: Valid=0 Frame=-1 Dirty=0 Requested=0
+
+                                        Request for page 3 in R mode
+                                        It's not in RAM - page fault
+Process 78803 has requested page 3
+Put it in free frame 1
+Unblock MMU
+                                         0: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         1: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         2: Valid=1 Frame= 0 Dirty=1 Requested=0
+                                         3: Valid=1 Frame= 1 Dirty=0 Requested=0
+                                         4: Valid=0 Frame=-1 Dirty=0 Requested=0
+
+                                        Request for page 3 in W mode
+                                        It's in RAM
+                                        Set the dirty bit for page 3
+                                         0: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         1: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         2: Valid=1 Frame= 0 Dirty=1 Requested=0
+                                         3: Valid=1 Frame= 1 Dirty=1 Requested=0
+                                         4: Valid=0 Frame=-1 Dirty=0 Requested=0
+
+                                        Request for page 4 in R mode
+                                        It's not in RAM - page fault
+
+Process 78803 has requested page 4
+Chose a victim page 2
+Victim is dirty, write out
+Put in victim's frame 0
+Unblock MMU
+                                         0: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         1: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         2: Valid=0 Frame=-1 Dirty=0 Requested=0
+                                         3: Valid=1 Frame= 1 Dirty=1 Requested=0
+                                         4: Valid=1 Frame= 0 Dirty=0 Requested=0
+                                        Tell OS that I'm finished
+The MMU has finished
+ 0: Valid=0 Frame=-1 Dirty=0 Requested=0
+ 1: Valid=0 Frame=-1 Dirty=0 Requested=0
+ 2: Valid=0 Frame=-1 Dirty=0 Requested=0
+ 3: Valid=1 Frame= 1 Dirty=1 Requested=0
+ 4: Valid=1 Frame= 0 Dirty=0 Requested=0
+4 disk accesses required
+Some Test Cases
+
+5 pages, 3 frames
+R0 R2 R1 W3 R0 R2 R1 W4 R0 R2 R1 W3 R0 R2 R1 W4 R0 R2 R1 W3 R0 R2 R1 W4
+My program does 20 disk accesses.
+4 pages, 3 frames
+R0 R0 R1 R0 R1 R2 R0 R1 R2 R3 R0 R1 R2 R0 R1 R0 R0 R0 R1 R0 R1 R2 R0 R1 R2 R3 R0 R1 R2 R0 R1 R0
+My program does 10 disk accesses.
+4 pages, 2 frames
+R0 R1 W1 R0 R2 W2 R0 R3 W3 R0 R1 W1 R0 R2 W2 R0 R3 W3 R0 R1 W1 R0 R2 W2 R0 R3 W3
+My program does 19 disk accesses.
+5 pages, 3 frames
+R0 R1 R1 W3 R0 R2 R2 W4 R0 R2 R2 W4 R0 R2 R2 W4 R0 R1 R1 W3 R0 R1 R1 W3
+My program does 12 disk accesses.
+4 pages, 3 frames
+R0 R1 R2 R0 R1 R2 R3 R1 R2 R3 R1 R2 R3 R0 R2 R3 R0 R2 R3 R0 R1 R3 R0 R1 R3 R0 R1 R2 R0 R1 R2 R0 R1 R2
+My program does 7 disk accesses.
+5 pages, 3 frames
+W0 R1 R2 R0 R3 W1 R2 R3 R4 R1 R2 W4 R1 R2 R0 R1 R2 R0 R1 R2 W0 R1 R3 W1
+My program does 13 disk accesses.
+5 pages 4 frames
+W0 R1 R2 R0 R3 W1 R2 R3 R4 R1 R2 W4 R1 R2 R0 R1 R2 R0 R1 R2 W0 R1 R3 W1
+My program does 12 disk accesses.
+5 pages 3 frames
+R0 R1 R0 W1 R0 R1 R0 W1 R0 R2 R0 W2 R0 R2 R0 W2 R0 R3 R0 W3 R0 R3 R0 W3 R0 R4 R0 W4 R0 R4 R0 W4
+My program does 8 disk accesses
