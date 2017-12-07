@@ -1,0 +1,22 @@
+Note from 2017-11-10 22:53:35.035
+//**How to run the project in Terminal(Linux)**//
+The OS Assignment:Virtual Memory Simulation Assignment.
+
+The folder consists of 3 files.
+1. PageTable.h
+2. MMU.c
+3. OS.c
+
+All the files must be in the "Desktop"(to run the codes of this project easily) after downloading(cloning) the project.Then in terminal directory has to be changed to "Desktop".(by "cd Desktop" command)
+
+For OS.c 
+1. vi OS.c  :: to open the file
+2. gcc -o OS OS.c  :: to compile
+3. ./OS 5/*no of pages*/  3/*no of frames*/  ::to execute or run
+
+For MMU.c (Open a new terminal)
+1. vi MMU.c  :: to open the file
+2. gcc -o MMU MMU.c  :: to compile
+3. ./MMU 5/*no of pages*/ R0 R2 R1 W3 R0 R2 R1 W4 R0 R2 R1 W3 R0 R2 R1 W4 R0 R2 R1 W3 R0 R2 R1 W4 /*the inputs*/ XXXX /*numerical address which is generated after the 3 step in "For OS.c"*/
+
+Output(no of "disk accesses required") will be generated in the terminal of OS.c and in the MMU.c terminal "Tell OS that I'm finished" will signifies the end of the program. For this sample input output is "20 disk accesses required". The program ends.
